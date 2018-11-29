@@ -1,24 +1,22 @@
 player_list = []
 # The map can be represented by a simple list of Land, because you only allow players to go forward in a single track
-map = []
+board = []
 class Player:
     def __init__(self,name):
         self.name = name
         self.money = 10000
         self.dice_value = 0
-        self.location =[0]
+        self.locatedLand = 0
         self.inJail = False
         self.ownedLands = []
+        self.enterYes = 'no'
 
-class Land:           
-     def __init__(self, name, price, payment):
-        self.name = name
-        self.price = price
-        self.payment = payment
-        self.wasBought = False  
-        self.builtHouse = 0         
-        self.owner = 'no'
-
+    def move(self):
+        self.dice_value=random.randint(1,7)
+        temp =self.locatedLand.location+ self.dice_value
+        if temp >= 28:
+            temp -= 28
+        self.locatedLand=board[temp]
 
 def init_game():
     # print out welcome messages, rules, and initialize map
