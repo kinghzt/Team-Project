@@ -1,9 +1,6 @@
 player_list = []
-
 # The map can be represented by a simple list of Land, because you only allow players to go forward in a single track
 map = []
-
-
 class Player:
     def __init__(self,name):
         self.name = name
@@ -25,16 +22,17 @@ class Land:
 
 def init_game():
     # print out welcome messages, rules, and initialize map
-    # Create the Land object and add them to map
-
+    #Create the Land object and add them to map
     print("*"*50)
     print("*" * 50)
     print(" " * 10 + "Game of Monopoly! Enjoy your time!" + " "*10)
     print("*" * 50)
     print("*" * 50)
-
-    setup_players()
     
+    from PIL import Image
+    im = Image.open('Monopoly.jpeg')
+    im.show()
+
     pass
 
 
