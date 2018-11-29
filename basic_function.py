@@ -233,13 +233,39 @@ def play_round():
 
 
 def check_winner():
-    print(winner.name,"is the wineer!")
+    # Check whether there is a winner of the game
+    player_left = 0
+    winner = 0
+    for player in player_list:
+        if not player.broke():
+            player_left += 1
+ 
+        if player_left == 1:
+            winner = self.name
+            return True
     return False
 
 
 def end_game():
     # winner won the game, print out winning status and other messages
-    pass
+    print("*" * 100)
+    print("*" * 100)
+    print('■                                ■                                ■       ■          ■■                           ■')
+    print('  ■                            ■  ■                             ■         ■          ■    ■                       ■')
+    print('   ■                         ■      ■                         ■           ■          ■       ■                    ■')
+    print('     ■                     ■          ■                     ■             ■          ■          ■                 ■')
+    print('       ■                 ■              ■                 ■               ■          ■             ■              ■')
+    print('         ■             ■                  ■             ■                 ■          ■                ■           ■')
+    print('           ■         ■                      ■         ■                   ■          ■                   ■        ■')
+    print('             ■     ■                          ■     ■                     ■          ■                      ■     ■')
+    print('               ■ ■                              ■ ■                       ■          ■                         ■  ■')
+    print('                ■                                ■                        ■          ■                           ■■')
+    print("*" * 100)
+    print("*" * 100)
+    
+
+    print(winner,"is the wineer!")
+  
 
 
 if __name__ == "__main__":
