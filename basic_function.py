@@ -28,7 +28,59 @@ class Player:
             return True
         else:
             None
-
+    
+    def construction(self):
+        if  self.enterYes== 'yes' and self.locatedLand.owner != self.name:
+            self.locatedLand.constructionLevel+= 1
+            self.money -= self.locatedLand.constructionCost
+            print(self.name + 'built a hotel on' + self.locatedLand.name)
+            return True
+        else:
+            None
+    
+    def event(self, allplayers): 
+        Land == self.locatedLand
+        if Land.name == 'Go': 
+            pass
+        if Land.name == 'Lucky':
+            pass
+        if Land.name == 'Jail':
+            pass
+        else:
+            if Land.wasBought == False:     
+                print(self.name +'threw a' + '%d'% self.dice_value + 'on the dice!')
+                print(self.name +'is in' + Land.name + '!')
+                print('Buying price is %d' % Land.price)
+                enterYes=input("Whether to buy?(yes/no): ")
+                while enterYes != 'yes' and enterYes != 'no':
+                    enterYes = input("You must enter yes or no. Please Enter Your Choice: ")
+                    return self.buyaland()
+            elif Land.owner == self.name:
+                print(self.name + 'threw a' + '%d'% self.dice_value + 'on the dice,')
+                print(self.name + 'comes to his land:'+ Land.name +'!')
+                if Land.constructionLevel <2:
+                    print('You can built a hotel on your land!')
+                   print('Construction fee is %d'% Land.constructionCost)
+                    enterYes=input("Whether to build?(yes/no): ")
+                    while enterYes != 'yes' and enterYes != 'no':
+                        enterYes = input("You must enter yes or no. Please Enter Your Choice: ")
+                    return self.construction()
+                                                                                                                                                                                                        else:
+                    print('You have reached its maximum level.')
+            else:
+                for player in player_list:
+                    if Land.owner == player.name and player.name != self.name:
+                        print(self.name + 'threw a' + '%d'% self.dice_value + 'on the dice!')
+                        print(self.name+ 'comes to'+ player.name+ 'land.')
+                        print('You are being charged!')
+                       print('Passing fee is %d' % (0.4 * Land.price * (2* Land.constructionLevel +1)))
+                        self.money -= 0.4 * Land.price * (2* Land.constructionLevel +1)
+                        player.money += 0.4 * Land.price * (2* Land.constructionLevel +1)
+                    else:
+                        None
+        
+                                                                                                                                                                                                            
+            
 def init_game():
     # print out welcome messages, rules, and initialize map
     #Create the Land object and add them to map
