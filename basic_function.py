@@ -129,6 +129,7 @@ def init_game():
     land25 = Land('CHINA ',330,25,66)
     land26 = Land('DUBAI ',360,26,72)
     land27 = Land('HAWAII',400,27,80)
+    board=[start, land1, land2, land3, land4, land5, land6, land7, land8, land9, land10, land11, land12, land13, land14, land15, land16, land17, land18, land19, land20, land21, land22, land23, land24, land25, land26, land27]
     
     from PIL import Image
     im = Image.open('Monopoly.jpeg')
