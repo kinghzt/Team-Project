@@ -1,7 +1,12 @@
+import PIL
+import random
 
 player_list = []
 # The map can be represented by a simple list of Land, because you only allow players to go forward in a single track
 board = []
+#initial game status
+game_running = True
+
 class Player:
     def __init__(self,name):
         self.name = name
@@ -13,11 +18,29 @@ class Player:
         self.enterYes = 'no'
 
     def move(self):
-        self.dice_value=random.randint(1,7)
-        temp =self.locatedLand.location+ self.dice_value
-        if temp >= 28:
-            temp -= 28
-        self.locatedLand=board[temp]
+        if self.inJail == True:
+            count = 0
+            print("You are still in Jail. You have to get a dice value of 6 to get you out of Jail")
+            
+            self.dice_value=random.randint(1,7)
+            if self.dice_value == 6 or count == 3:
+                  print("Ok. You are free now")
+                  
+                  self.dice_value=random.randint(1,7)
+                  temp =self.locatedLand.location+ self.dice_value
+                  if temp >= 28:
+                      temp -= 28
+                  self.locatedLand=board[temp]
+            else:
+                count = count + 1
+                print('You cannot get out of Jail now')
+        else:
+
+            self.dice_value=random.randint(1,7)          
+            temp =self.locatedLand.location+ self.dice_value
+            if temp >= 28:
+                temp -= 28
+            self.locatedLand=board[temp]
 
     def buyaLand(self): 
         if  self.enterYes== 'yes' and self.locatedLand.owner != self.name:
@@ -39,14 +62,41 @@ class Player:
         else:
             None
     
-    def event(self, allplayers): 
+    def event(self, player_list): 
         Land == self.locatedLand
-        if Land.name == 'Go': 
-            pass
-        if Land.name == 'Lucky':
-            pass
+        
+        if Land.name == 'CHANCE':
+            print("Welcome come to the Chance room! Let's see if you a lucky dog or not")
+
+            chance_incident = ['+$200', '+$100', '-$100','-$200','Jail','equal_to_1000']
+            get_chance = random.choice(chance_incident)
+
+            if get_chance == '+$200':
+                self.money = self.money + 200
+                print('Player' + self.name + 'just Won $200 from Chance room!')
+            elif get_chance == '+$100':
+                self.money = self.money + 100
+                print('Player' + self.name + 'just Won $100 from Chance room!')
+            elif get_chance == '-$100':
+                self.money = self.money - 100
+                print('Player' + self.name + 'just lost $100 from Chance room!')
+            elif get_chance == '-$200':
+                self.money = self.money - 200
+                print('Player' + self.name + 'just lost $200 from Chance room!')
+            elif get_chance == 'Jail':
+                self.locatedLand = 14
+                self.inJail = True
+                print('Player' + self.name + 'is sent to Jail because of bad luck')
+            elif get_chance == 'equal_to_1000':
+                self.money = 1000
+                print('Player' + self.name + 'total amount of money became $1000')
+            
         if Land.name == 'Jail':
+            print("You are under arrested! You have stay here in the next three turns unless you can get a dice value of 6")
+            self.inJail = True
+            
             pass
+
         else:
             if Land.wasBought == False:     
                 print(self.name +'threw a' + '%d'% self.dice_value + 'on the dice!')
@@ -78,6 +128,7 @@ class Player:
                         self.money -= 0.4 * Land.price * (2* Land.constructionLevel +1)
                         player.money += 0.4 * Land.price * (2* Land.constructionLevel +1)
                     else:
+
                         None
     def broke(self):
         if self.money < 0:
@@ -154,7 +205,7 @@ def setup_players():
     player_list = []
     number_of_players = int(input("Please enter the number of payers(2-4): "))
     while number_of_players <2 or number_of_players >4:
-        number_of_players = int(input("Sorry, the current version cannot support this mode. Please enter the  correct number of payers(2-4): "))
+        number_of_players = int(input("Sorry, the current version cannot support this mode. \n Please enter the  correct number of payers(2-4): "))
     for i in range(0,number_of_players):
         player_name = input("Enter the Player name:")
         while player_name =='':
@@ -169,6 +220,9 @@ def run_game():
     # e.g.:
     # while (some conditions that you determine to end a round):
     #   play_round()
+
+        
+        
     pass
 
 
@@ -179,7 +233,7 @@ def play_round():
 
 
 def check_winner():
-    # Check whether there is a winner of the game
+    print(winner.name,"is the wineer!")
     return False
 
 
