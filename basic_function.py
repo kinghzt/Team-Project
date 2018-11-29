@@ -78,7 +78,16 @@ class Player:
                         player.money += 0.4 * Land.price * (2* Land.constructionLevel +1)
                     else:
                         None
-        
+    def broke(self):
+        if self.money < 0:
+            print('You are broke. Game ends')
+            player_list.remove(self.name)
+            for land in self.ownedLands:
+                land.owner = 'no'
+                land.wasBought = False
+                land.constructionLevel = 0
+        else:
+            None
                                                                                                                                                                                                             
             
 def init_game():
