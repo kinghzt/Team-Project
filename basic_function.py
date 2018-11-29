@@ -18,6 +18,17 @@ class Player:
             temp -= 28
         self.locatedLand=board[temp]
 
+    def buyaLand(self): 
+        if  self.enterYes== 'yes' and self.locatedLand.owner != self.name:
+            self.locatedLand.owner = self.name
+            self.locatedLand.wasBought = True
+            self.ownedLands.append(self.locatedLand)
+            self.money -= self.locatedLand.price
+            print(self.name + 'bought' + self.locatedLand.name + '!')
+            return True
+        else:
+            None
+
 def init_game():
     # print out welcome messages, rules, and initialize map
     #Create the Land object and add them to map
