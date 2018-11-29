@@ -73,6 +73,8 @@ def setup_players():
 
     player_list = []
     number_of_players = int(input("Please enter the number of payers(2-4): "))
+    while number_of_players <2 or number_of_players >4:
+        number_of_players = int(input("Sorry, the current version cannot support this mode. Please enter the  correct number of payers(2-4): "))
     for i in range(0,number_of_players):
         player_name = input("Enter the Player name:")
         while player_name =='':
