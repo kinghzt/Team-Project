@@ -1,3 +1,4 @@
+
 player_list = []
 # The map can be represented by a simple list of Land, because you only allow players to go forward in a single track
 board = []
@@ -60,12 +61,12 @@ class Player:
                 print(self.name + 'comes to his land:'+ Land.name +'!')
                 if Land.constructionLevel <2:
                     print('You can built a hotel on your land!')
-                   print('Construction fee is %d'% Land.constructionCost)
+                    print('Construction fee is %d'% Land.constructionCost)
                     enterYes=input("Whether to build?(yes/no): ")
                     while enterYes != 'yes' and enterYes != 'no':
                         enterYes = input("You must enter yes or no. Please Enter Your Choice: ")
                     return self.construction()
-                                                                                                                                                                                                        else:
+                else:
                     print('You have reached its maximum level.')
             else:
                 for player in player_list:
@@ -73,7 +74,7 @@ class Player:
                         print(self.name + 'threw a' + '%d'% self.dice_value + 'on the dice!')
                         print(self.name+ 'comes to'+ player.name+ 'land.')
                         print('You are being charged!')
-                       print('Passing fee is %d' % (0.4 * Land.price * (2* Land.constructionLevel +1)))
+                        print('Passing fee is %d' % (0.4 * Land.price * (2* Land.constructionLevel +1)))
                         self.money -= 0.4 * Land.price * (2* Land.constructionLevel +1)
                         player.money += 0.4 * Land.price * (2* Land.constructionLevel +1)
                     else:
@@ -88,7 +89,15 @@ class Player:
                 land.constructionLevel = 0
         else:
             None
-                                                                                                                                                                                                            
+class Land:
+    def __init__(self, name, price, location, constructionCost):
+        self.name = name
+        self.price = price
+        self.constructionCost = constructionCost
+        self.wasBought = False  
+        self.constructionLevel = 0
+        self.location = location
+        self.owner = 'no'                                                                                                                                                                                                            
             
 def init_game():
     # print out welcome messages, rules, and initialize map
@@ -184,3 +193,4 @@ if __name__ == "__main__":
     while check_winner():
         run_game()
     end_game()
+
