@@ -229,8 +229,23 @@ def run_game():
 def play_round():
     # Each player tosses the dice and make the move
     # Make sure to update the Player object
-    pass
 
+    round_is_over = False
+    while round_is_over == False:
+        print('Player' + self.name +'turns to throw a dice')
+
+        Player.move()
+
+        print(self.name +'threw a' + '%d'% self.dice_value + 'on the dice!')
+        print(self.name +'move to ' + Land.name + '!')
+
+        Player.event()
+        Player.broke()
+        e = input('Please Enter "end" to finish your turn: ')
+        while e != end:
+            e = input('Please Enter the correct command to finish your turn: ')
+        if e == 'end':
+            round_is_over = True
 
 def check_winner():
     # Check whether there is a winner of the game
