@@ -14,7 +14,8 @@ Install the PIL package
 
 ![Image text]
 
-(https://github.com/kinghzt/Team-Project/blob/master/install.png)
+(http://github.com/kinghzt/Team-Project/master/install.png)
+
 
 
 INSTRUCTION：
