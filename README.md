@@ -11,8 +11,10 @@ Monopoly is a board game for 2 - 4 players, in which players roll a dice to move
 
 INSTALLATION：
 Install the PIL package
+
 ![Image text]
-（https://github.com/kinghzt/Team-Project/blob/master/install.png）
+
+(https://github.com/kinghzt/Team-Project/blob/master/install.png)
 
 
 INSTRUCTION：
