@@ -126,16 +126,16 @@ class Map:
     def getLand(self, index):
         return self.board[index]
 
-
+# Class Game
 class Game:
-
+     # Initial attribute of Game
     def __init__(self):
         self.map = Map()
         self.players = []
         self.playTurn = 0
         self.remainPlayer = -1
         self.numPlayer = -1
-
+     # pattern of game start
     def initialGame(self):
         print("*"*50)
         print("*" * 50)
@@ -143,7 +143,7 @@ class Game:
         print("*" * 50)
         print("*" * 50)
 
-
+        # set number of players and initial money
         number_of_players = int(input("Please enter the number of payers(2-4): "))
 
         while number_of_players <2 or number_of_players >4:
@@ -162,7 +162,8 @@ class Game:
 
         
         print('\n\n\n\n')
-
+    # the turn of the game 
+    # rule of Jail and passing Go
     def start(self):
         while(True):
             if self.remainPlayer == 1:
@@ -205,7 +206,9 @@ class Game:
                 print('\n'*3)
                 self.playTurn = (self.playTurn + 1)% self.numPlayer
                 self.updateRemainPlayer()
-
+    # buy land and construction on the land
+    # upgrade the house
+    # pay the toll fee 
     def landOperation(self, curLand, player):
         print('You current money is ${}'.format(player.money))
         if curLand.name == 'CHANCE':
