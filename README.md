@@ -10,6 +10,7 @@ Monopoly is a board game for 2 - 4 players, in which players roll a dice to move
 
 INSTALLATION INSTRUCTION:
 Install the pillow packages in order to run the game
+
 Input the following command at the terminal:
 pip install pillow
 
