@@ -151,7 +151,7 @@ class Game:
         print("*" * 50)
 
         # set number of players and initial money
-        number_of_players = int(input("Please enter the number of payers(2-4): "))
+        number_of_players = int(input("Please enter the number of players(2-4): "))
 
         while number_of_players <2 or number_of_players >4:
             number_of_players = int(input("Sorry, the current version cannot support this mode. \n Please enter the  correct number of payers(2-4): "))
