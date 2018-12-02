@@ -170,7 +170,7 @@ class Game:
                     pass
                 else:
                     print('It is {}\'s turn to go'.format(self.players[self.playTurn].name))
-                    input('Please Enter any Key to Throw a Dice:')
+                    input('\nPlease Enter any Key to Throw a Dice:')
     
 
                     print('{} is throwing a dice'.format(self.players[self.playTurn].name))
@@ -183,6 +183,7 @@ class Game:
                             self.players[self.playTurn].JailedRound = 0
                             self.players[self.playTurn].inJail = False
                         if step == 6:
+			    print('Congratulations! You are free now!')
                             continue
                     else:
                         
