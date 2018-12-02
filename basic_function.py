@@ -72,7 +72,7 @@ class Map:
                 Land('SWEDEN',230,46),
                 Land('FINLAND',240,48),
                 Land('GERMANY',280,56),
-                Land('FRANCE',290,58),
+                Land('FRANCE',290,58),               
                 Land('UNITED KINDOM',300,60),
                 Land('CHANCE',0,0),
                 Land('CANDA',300,60),
