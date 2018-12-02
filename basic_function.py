@@ -247,7 +247,7 @@ class Game:
         else:
             pass
 
-    def getSurvivior(self):
+    def getSurvivor(self):
         ret = []
         for player in self.players:
             if not player.isBroke:
@@ -277,7 +277,7 @@ class Game:
         print('                ■                                ■                        ■          ■                           ■■')
         print("*" * 100)
         print("*" * 100)
-        print('Player {} is the winner'.format(self.getSurviviior[0].name))
+        print('Player {} is the winner'.format(self.getSurvivor()[0]name))
 
 
 if __name__ == "__main__":
