@@ -45,7 +45,10 @@ class Player:
         return self.money
     #Showing current player's balance and land properties
     def displayProperties(self):
-        print('Player {}\'s balance: {} with the following land properties:\n'.format(self.name, self.money))
+        if self.isBroke == True:
+            print('Player {}\'s balance: 0 with the following land properties:\n'.format(self.name))
+        else:
+            print('Player {}\'s balance: {} with the following land properties:\n'.format(self.name, self.money))
         for land in self.owned_land:
             print(land.name, end=' ')
         print('\n')
