@@ -11,4 +11,4 @@ Monopoly is a board game for 2 - 4 players, in which players roll a dice to move
 
 
 INSTRUCTION: 
-Run the code, and play the game as the instructions the code give. 
+Run the code, and play the game as the instructions that the code give. 
