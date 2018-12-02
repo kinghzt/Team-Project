@@ -52,7 +52,7 @@ class Land:
         self.owner = None
 
     def queryConstructCost(self):
-        #You should define your construction fee rule here
+ 
         return self.basicConstructionCost * (self.constructionLevel + 1)
 
     def construct(self, player):
@@ -71,8 +71,8 @@ class Land:
         return self.constructionLevel
 
     def queryRoadToll(self):
-        #You should define your road toll rule here
-        return self.basicPrice*(2 * self.constructionLevel + 1)
+
+       	return 0.4*self.basicPrice*(2 * self.constructionLevel + 1)
 
 class Map:
     def __init__(self):
