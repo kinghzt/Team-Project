@@ -1,7 +1,8 @@
 
+# -*- coding: utf-8 -*-
+
 import random
-import PIL
-JAIL_IN= 14
+JAIL_INDEX = 14
 CHANCE_EARN_200 = 0
 CHANCE_EARN_100 = 1
 CHANCE_PAY_200 = 2
@@ -19,6 +20,7 @@ class Player:
         self.inJail = False
         self.JailedRound = 0
         self.isBroke = False
+        self.owned_land = []
 
     
     def payMoney(self, amount):
@@ -36,8 +38,13 @@ class Player:
     def money_1000(self):
         self.money = 1000
         return self.money
+    def displayProperties(self):
+        print('Player {}\'s balance: {} with the following land properties:\n'.format(self.name, self.money))
+        for land in self.owned_land:
+            print(land.name, end=' ')
+        print('\n')
 class Land:
-    def __init__(self, name, price, constructionCost):
+    def __init__(self, name, constructionCost,price):
         self.name = name
         self.basicPrice = price
         self.basicConstructionCost = constructionCost 
@@ -45,11 +52,13 @@ class Land:
         self.owner = None
 
     def queryConstructCost(self):
+        #You should define your construction fee rule here
         return self.basicConstructionCost * (self.constructionLevel + 1)
 
     def construct(self, player):
         print('Build house at {}'.format(self.name))
         self.owner = player
+        player.owned_land.append(self)
         player.payMoney(self.queryConstructCost())
         self.constructionLevel += 1
 
@@ -62,7 +71,8 @@ class Land:
         return self.constructionLevel
 
     def queryRoadToll(self):
-        return 0.4*self.basicPrice*(2 * self.constructionLevel + 1)
+        #You should define your road toll rule here
+        return self.basicPrice*(2 * self.constructionLevel + 1)
 
 class Map:
     def __init__(self):
@@ -135,6 +145,7 @@ class Game:
             while player_name =='':
                 player_name = input("You must have a valid name to start. Please Enter the Player name: ")
             self.players.append(Player(player_name,money))
+
         
         print('\n\n\n\n')
 
@@ -144,57 +155,40 @@ class Game:
                 self.endGame()
                 break
             else:
-                print('It is {}\'s turn to go'.format(self.players[self.playTurn].name))
-                if self.players[self.playTurn].inJail:
-                    print('Player {} is in Jail'.format(self.players[self.playTurn].name))
-                    self.players[self.playTurn].JailedRound += 1
-                    if  self.players[self.playTurn].JailedRound == 3 or step==6:
-                        self.players[self.playTurn].JailedRound = 0
-                        self.players[self.playTurn].inJail = False
-                elif self.players[self.playTurn].isBroke:
+                if self.players[self.playTurn].isBroke:
                     pass
                 else:
-<<<<<<< HEAD
+                    print('It is {}\'s turn to go'.format(self.players[self.playTurn].name))
+                    print('{} is throwing a dice'.format(self.players[self.playTurn].name))
                     step = self.rollDice()
-                    print('You can go {} steps forward'.format(step))
-                    player = self.players[self.playTurn]
-                    if player.locatedLand+step>=self.map.getLength():
-                        player.earnMoney(200)
-                        print('Passing the start point. You earn 200')
-                    player.locatedLand = (step + player.locatedLand)%self.map.getLength()
-                    curLand = self.map.getLand(player.locatedLand)
-                    print('Player {} is at {}'.format(player.name, curLand.name))
-                    self.landOperation(curLand, player)
-                  input('Please Enter to end this round')
-                print('\n'*3)
-                self.playTurn = (self.playTurn + 1)% self.numPlayer
-                self.updateRemainPlayer()
-=======
-                    print('It is {}\'s turn to roll the dice'.format(self.players[self.playTurn].name))
-                    dice_choice = input('Enter y to roll the dice, enter n to end the turn:')
-                    while dice_choice != 'y' and dice_choice != 'n':
-                        dice_choice = input("You must enter your choice y/n: ")
-                    if dice_choice == 'n':
-                        pass
-                    if dice_choice == 'y':
-                        print('{} is throwing a dice'.format(self.players[self.playTurn].name))
-                        step = self.rollDice()
+                    print('You get {}'.format(step))
+                    if self.players[self.playTurn].inJail:
+                        print('Player {} is in Jail'.format(self.players[self.playTurn].name))
+                        self.players[self.playTurn].JailedRound += 1
+                        if  self.players[self.playTurn].JailedRound == 3 or step==6:
+                            self.players[self.playTurn].JailedRound = 0
+                            self.players[self.playTurn].inJail = False
+                        if step == 6:
+                            continue
+                    else:
+                        
                         print('You can go {} steps forward'.format(step))
                         player = self.players[self.playTurn]
-
+    
                         if player.locatedLand+step>=self.map.getLength():
                             player.earnMoney(200)
                             print('Passing the start point. You earn $200')
                         player.locatedLand = (step + player.locatedLand)%self.map.getLength()
-
+    
                         curLand = self.map.getLand(player.locatedLand)
                         print('Player {} is at {}'.format(player.name, curLand.name))
                         self.landOperation(curLand, player)
-                    print('\n'*3)
-                    self.playTurn = (self.playTurn + 1)% self.numPlayer
-                    self.updateRemainPlayer()
+                    player.displayProperties()
+                    input('Please Enter to end this round')
+                print('\n'*3)
+                self.playTurn = (self.playTurn + 1)% self.numPlayer
+                self.updateRemainPlayer()
 
->>>>>>> 66a9f75cf1b4c979c50dc554ad73d11f69f94243
     def landOperation(self, curLand, player):
         print('You current money is ${}'.format(player.money))
         if curLand.name == 'CHANCE':
@@ -206,11 +200,11 @@ class Game:
         elif curLand.owner == None:
             if player.money >= curLand.basicPrice:
                 while True:
-                    choice  = str(input('Land cost is  ${}.  \nAre you willing to buy this land(Y/N)?:  '.format(curLand.basicPrice)))
+                    choice  = str(input('Land cost is  ${}.  \nAre you willing to buy this land(Y/N)?:  '.format(curLand.queryConstructCost())))
                     if choice == 'Y' or choice == 'y':
                         curLand.construct(player)
                         break
-                    elif choice == 'n' or choice == 'n':
+                    elif choice == 'N' or choice == 'n':
                         break
                     else:
                         print('Please input valid choice')
@@ -223,15 +217,15 @@ class Game:
                     if choice == 'Y' or choice == 'y':
                         curLand.upgrade()
                         break
-                    elif choice == 'n' or choice == 'n':
+                    elif choice == 'N' or choice == 'n':
                         break
                     else:
                         print('Please input valid choice')
         else:
             paid_amount = min(curLand.queryRoadToll(), player.money)
             curLand.owner.earnMoney(paid_amount)
-            player.payMoney(curLand.queryRoadToll()) 
             print('{} paid ${} to {}'.format(player.name, paid_amount, curLand.owner.name))
+            player.payMoney(curLand.queryRoadToll()) 
 
 
     def rollDice(self):
@@ -265,7 +259,7 @@ class Game:
         else:
             pass
 
-    def getSurvivor(self):
+    def getSurvivior(self):
         ret = []
         for player in self.players:
             if not player.isBroke:
@@ -295,7 +289,7 @@ class Game:
         print('                ■                                ■                        ■          ■                           ■■')
         print("*" * 100)
         print("*" * 100)
-        print('Player {} is the winner'.format(self.getSurvivor()[0].name))
+        print('Player {} is the winner'.format(self.getSurvivior()[0].name))
 
 
 if __name__ == "__main__":
