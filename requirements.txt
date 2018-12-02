@@ -1,7 +1,8 @@
-Installation instructions
+INSTALLATION INSTRUCTION: 
 
-You should install the following packages in order to run our game:
+Install the pillow packages in order to run the game
 
+Input the following command at the terminal
 
-1. pillow ---> pip install pillow
+pip install pillow
 
