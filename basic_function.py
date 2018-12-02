@@ -150,22 +150,25 @@ class Game:
         print("*" * 50)
         print("*" * 50)
         # set number of players and initial money
-        number_of_players = input("Please enter the number of players(2-4): ")
-        while not number_of_players.isdigit():
-            number_of_players = input('Not a number, Please try again: ')
-        number_of_players = int(number_of_players)
-        while number_of_players <2 or number_of_players >4:
-            number_of_players = int(input("Sorry, the current version cannot support this mode. \n Please enter the  correct number of payers(2-4): "))
-            
+        while True:
+            number_of_players = input("Please enter the number of players(2-4): ")
+            if not number_of_players.isdigit():
+                print('Not a number, Please try again! Please Enter the correct number: ')
+                continue
+            number_of_players = int(number_of_players)
+            if number_of_players >= 2 and number_of_players <= 4:
+                break
+            else:
+                number_of_players = input("Sorry, the current version cannot support this mode. \n Please enter the  correct number of players(2-4): ")     
         self.numPlayer = number_of_players
         self.remainPlayer = number_of_players
 
         money = input('Please Enter the initial amount of money that you would like to play: ')
         while not money.isdigit():
-            money = input('Not a number, Please try again')
+            money = input('Not a number, Please try again! Please Enter the correct number: ')
         money = int(money)
         for i in range(0,number_of_players):
-            player_name = input("Enter the Player name:")
+            player_name = input("Enter the Player name: ")
             while player_name =='':
                 player_name = input("You must have a valid name to start. Please Enter the Player name: ")
             self.players.append(Player(player_name,money))
