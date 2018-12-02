@@ -62,7 +62,7 @@ class Land:
     def queryConstructCost(self):
  
         return self.basicConstructionCost * (self.constructionLevel + 1)
-    #onf of the  main functions of building house
+    #one of the main functions of building house
     def construct(self, player):
         print('Player {} has constructed a house at {}'.format(player.name,self.name))
         self.owner = player
