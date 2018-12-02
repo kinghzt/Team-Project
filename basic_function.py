@@ -153,22 +153,29 @@ class Game:
                 elif self.players[self.playTurn].isBroke:
                     pass
                 else:
-                    print('{} is throwing a dice'.format(self.players[self.playTurn].name))
-                    step = self.rollDice()
-                    print('You can go {} steps forward'.format(step))
-                    player = self.players[self.playTurn]
+                    print('It is {}\'s turn to roll the dice'.format(self.players[self.playTurn].name))
+                    dice_choice = input('Enter y to roll the dice, enter n to end the turn:')
+                    while dice_choice != 'y' and dice_choice != 'n':
+                    dice_choice = input("You must enter your choice y/n: ")
+                    if dice_choice == 'n':
+                        pass
+                    if dice_choice == 'y':
+                        print('{} is throwing a dice'.format(self.players[self.playTurn].name))
+                        step = self.rollDice()
+                        print('You can go {} steps forward'.format(step))
+                        player = self.players[self.playTurn]
 
-                    if player.locatedLand+step>=self.map.getLength():
-                        player.earnMoney(200)
-                        print('Passing the start point. You earn $200')
-                    player.locatedLand = (step + player.locatedLand)%self.map.getLength()
+                        if player.locatedLand+step>=self.map.getLength():
+                            player.earnMoney(200)
+                            print('Passing the start point. You earn $200')
+                        player.locatedLand = (step + player.locatedLand)%self.map.getLength()
 
-                    curLand = self.map.getLand(player.locatedLand)
-                    print('Player {} is at {}'.format(player.name, curLand.name))
-                    self.landOperation(curLand, player)
-                print('\n'*3)
-                self.playTurn = (self.playTurn + 1)% self.numPlayer
-                self.updateRemainPlayer()
+                        curLand = self.map.getLand(player.locatedLand)
+                        print('Player {} is at {}'.format(player.name, curLand.name))
+                        self.landOperation(curLand, player)
+                    print('\n'*3)
+                    self.playTurn = (self.playTurn + 1)% self.numPlayer
+                    self.updateRemainPlayer()
 
     def landOperation(self, curLand, player):
         print('You current money is ${}'.format(player.money))
