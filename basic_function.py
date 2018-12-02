@@ -35,14 +35,17 @@ class Player:
         else:
             self.money -= amount
             return True
+
     #Salary function
     def earnMoney(self, amount):
         self.money += amount
         return self.money
+
     #Chance room function
     def money_1000(self):
         self.money = 1000
         return self.money
+
     #Showing current player's balance and land properties
     def displayProperties(self):
         if self.isBroke == True:
@@ -61,10 +64,11 @@ class Land:
         self.basicConstructionCost = constructionCost 
         self.constructionLevel = 0
         self.owner = None
-    #Dynamiclly chaning the construction cost
+
+    #Dynamiclly changing the construction cost
     def queryConstructCost(self):
- 
         return self.basicConstructionCost * (self.constructionLevel + 1)
+
     #one of the main functions of building house
     def construct(self, player):
         print('Player {} has constructed a house at {}'.format(player.name,self.name))
@@ -72,17 +76,19 @@ class Land:
         player.owned_land.append(self)
         player.payMoney(self.basicPrice)
         self.constructionLevel += 1
+
     #one of the main functions of upgrading house level
     def upgrade(self):
         print('Upgrade house at {} from {} to {}'.format(self.name,self.constructionLevel,self.constructionLevel+1))
         self.owner.payMoney(self.queryConstructCost())
         self.constructionLevel += 1
+
     #Setting house level
     def queryLevel(self):
         return self.constructionLevel
+
     #Setting Toll Fee dynamiclly
     def queryRoadToll(self):
-
        	return 0.4*self.basicPrice*(2 * self.constructionLevel + 1)
 
 #Class Map
@@ -119,7 +125,7 @@ class Map:
                 Land('CHINA ',330,66),
                 Land('DUBAI ',360,72),
                 Land('HAWAII',400,80)]
-
+    
     def getLength(self):
         return len(self.board)
 
@@ -135,6 +141,7 @@ class Game:
         self.playTurn = 0
         self.remainPlayer = -1
         self.numPlayer = -1
+
      # pattern of game start
     def initialGame(self):
         print("*"*50)
@@ -162,6 +169,7 @@ class Game:
 
         
         print('\n\n\n\n')
+
     # the turn of the game 
     # rule of Jail and passing Go
     def start(self):
@@ -205,6 +213,7 @@ class Game:
                 print('\n'*3)
                 self.playTurn = (self.playTurn + 1)% self.numPlayer
                 self.updateRemainPlayer()
+
     # buy land and construction on the land
     # upgrade the house
     # pay the toll fee 
@@ -246,11 +255,11 @@ class Game:
             print('{} paid ${} to {}'.format(player.name, paid_amount, curLand.owner.name))
             player.payMoney(curLand.queryRoadToll()) 
 
-
+    #set the dice value
     def rollDice(self):
         return random.randint(1, 6)
 
-
+    #show the event happened in the chance room
     def doChance(self, player):
         chance_code = random.randint(0,5)
         print('Player {} get a dice value of {}'.format(player.name,chance_code))
@@ -278,6 +287,7 @@ class Game:
         else:
             pass
 
+    #update the list of players who are not broke 
     def getSurvivor(self):
         ret = []
         for player in self.players:
@@ -285,6 +295,7 @@ class Game:
                 ret.append(player)
         return ret 
 
+    #update the number of players who are not brokes
     def updateRemainPlayer(self):
         ret = 0
         for player in self.players:
@@ -292,8 +303,8 @@ class Game:
                 ret+=1
         self.remainPlayer = ret
 
+    #show the ending message and the winner
     def endGame(self):
- 
         print("*" * 100)
         print("*" * 100)
         print('■                                ■                                ■       ■          ■■                           ■')
@@ -310,7 +321,7 @@ class Game:
         print("*" * 100)
         print('Player {} is the winner'.format(self.getSurvivor()[0].name))
 
-
+#run the game
 if __name__ == "__main__":
     game = Game()
     game.initialGame()
