@@ -1,7 +1,8 @@
 
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*
 
 import random
+
 JAIL_INDEX = 14
 CHANCE_EARN_200 = 0
 CHANCE_EARN_100 = 1
@@ -44,7 +45,7 @@ class Player:
             print(land.name, end=' ')
         print('\n')
 class Land:
-    def __init__(self, name, constructionCost,price):
+    def __init__(self, name,price,constructionCost):
         self.name = name
         self.basicPrice = price
         self.basicConstructionCost = constructionCost 
@@ -56,10 +57,10 @@ class Land:
         return self.basicConstructionCost * (self.constructionLevel + 1)
 
     def construct(self, player):
-        print('Build house at {}'.format(self.name))
+        print('Player {} has constructed a house at {}'.format(player.name,self.name))
         self.owner = player
         player.owned_land.append(self)
-        player.payMoney(self.queryConstructCost())
+        player.payMoney(self.basicPrice)
         self.constructionLevel += 1
 
     def upgrade(self):
@@ -159,6 +160,9 @@ class Game:
                     pass
                 else:
                     print('It is {}\'s turn to go'.format(self.players[self.playTurn].name))
+                    input('Please Enter any Key to Throw a Dice:')
+    
+
                     print('{} is throwing a dice'.format(self.players[self.playTurn].name))
                     step = self.rollDice()
                     print('You get {}'.format(step))
@@ -184,7 +188,7 @@ class Game:
                         print('Player {} is at {}'.format(player.name, curLand.name))
                         self.landOperation(curLand, player)
                     player.displayProperties()
-                    input('Please Enter to end this round')
+                    input('Please Enter any Key to End this round: ')
                 print('\n'*3)
                 self.playTurn = (self.playTurn + 1)% self.numPlayer
                 self.updateRemainPlayer()
@@ -200,7 +204,7 @@ class Game:
         elif curLand.owner == None:
             if player.money >= curLand.basicPrice:
                 while True:
-                    choice  = str(input('Land cost is  ${}.  \nAre you willing to buy this land(Y/N)?:  '.format(curLand.queryConstructCost())))
+                    choice  = str(input('Land cost is  ${}.  \nAre you willing to buy this land(Y/N)?:  '.format(curLand.basicPrice)))
                     if choice == 'Y' or choice == 'y':
                         curLand.construct(player)
                         break
@@ -299,10 +303,4 @@ if __name__ == "__main__":
     im = Image.open('Monopoly.jpg')
     im.show()
     game.start()
-    
-    
-    
-       
-        
-        
-
+-
