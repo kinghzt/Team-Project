@@ -1,0 +1,7 @@
+Installation instructions
+
+You should install the following packages in order to run our game:
+
+
+1. pillow ---> pip install pillow
+
