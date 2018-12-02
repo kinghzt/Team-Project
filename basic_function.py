@@ -173,7 +173,7 @@ class Game:
                     pass
                 else:
                     print('It is {}\'s turn to go'.format(self.players[self.playTurn].name))
-                    input('Please Enter any Key to Throw a Dice:')
+                    input('Please press Enter to Throw a Dice:')
     
 
                     print('{} is throwing a dice'.format(self.players[self.playTurn].name))
@@ -201,7 +201,7 @@ class Game:
                         print('Player {} is at {}'.format(player.name, curLand.name))
                         self.landOperation(curLand, player)
                     player.displayProperties()
-                    input('Please Enter any Key to End this round: ')
+                    input('Please press Enter to End this round: ')
                 print('\n'*3)
                 self.playTurn = (self.playTurn + 1)% self.numPlayer
                 self.updateRemainPlayer()
