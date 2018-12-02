@@ -186,8 +186,7 @@ class Game:
                             self.players[self.playTurn].JailedRound = 0
                             self.players[self.playTurn].inJail = False
                         if step == 6:
-			    print('Congratulations! You are free now!')
-                            continue
+                            print('Congratulations! You are free now!')
                     else:
                         
                         print('You can go {} steps forward'.format(step))
