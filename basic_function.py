@@ -3,6 +3,7 @@
 
 import random
 
+#intial value of some game functions for Jail, Chance and Max level of building
 JAIL_INDEX = 14
 CHANCE_EARN_200 = 0
 CHANCE_EARN_100 = 1
@@ -12,8 +13,10 @@ CHANCE_GO_TO_JAIL = 4
 CHANCE_BECAME_1000 = 5
 MAX_CONSTRUCT_LEVEL = 3
 
+#Ojbect Player
 class Player:
-
+    
+    # class Player attribute
     def __init__(self,name,money):
         self.name = name
         self.money = money
@@ -22,8 +25,8 @@ class Player:
         self.JailedRound = 0
         self.isBroke = False
         self.owned_land = []
-
-    
+ 
+    #Payment function
     def payMoney(self, amount):
         if amount > self.money:
             self.isBroke = True
@@ -32,18 +35,22 @@ class Player:
         else:
             self.money -= amount
             return True
+    #Salary function
     def earnMoney(self, amount):
         self.money += amount
         return self.money
-
+    #Chance room function
     def money_1000(self):
         self.money = 1000
         return self.money
+    #Showing current player's balance and land properties
     def displayProperties(self):
         print('Player {}\'s balance: {} with the following land properties:\n'.format(self.name, self.money))
         for land in self.owned_land:
             print(land.name, end=' ')
         print('\n')
+
+#Class Land
 class Land:
     def __init__(self, name,price,constructionCost):
         self.name = name
@@ -51,32 +58,35 @@ class Land:
         self.basicConstructionCost = constructionCost 
         self.constructionLevel = 0
         self.owner = None
-
+    #Dynamiclly chaning the construction cost
     def queryConstructCost(self):
  
         return self.basicConstructionCost * (self.constructionLevel + 1)
-
+    #onf of the  main functions of building house
     def construct(self, player):
         print('Player {} has constructed a house at {}'.format(player.name,self.name))
         self.owner = player
         player.owned_land.append(self)
         player.payMoney(self.basicPrice)
         self.constructionLevel += 1
-
+    #one of the main functions of upgrading house level
     def upgrade(self):
         print('Upgrade house at {} from {} to {}'.format(self.name,self.constructionLevel,self.constructionLevel+1))
         self.owner.payMoney(self.queryConstructCost())
         self.constructionLevel += 1
-
+    #Setting house level
     def queryLevel(self):
         return self.constructionLevel
-
+    #Setting Toll Fee dynamiclly
     def queryRoadToll(self):
 
        	return 0.4*self.basicPrice*(2 * self.constructionLevel + 1)
 
+#Class Map
 class Map:
+    #Initial attribute of Map
     def __init__(self):
+        #Setting basic value of each place
         self.board = [
                 Land('Go',0,0),
                 Land('LIBYA', 50,10),
