@@ -1,5 +1,6 @@
 import random
-JAIL_INDEX = 14
+import PPIL
+JAIL_IN= 14
 CHANCE_EARN_200 = 0
 CHANCE_EARN_100 = 1
 CHANCE_PAY_200 = 2
@@ -119,7 +120,7 @@ class Game:
                 if self.players[self.playTurn].inJail:
                     print('Player {} is in Jail'.format(self.players[self.playTurn].name))
                     self.players[self.playTurn].JailedRound += 1
-                    if  self.players[self.playTurn].JailedRound == 3:
+                    if  self.players[self.playTurn].JailedRound == 3 or step==6:
                         self.players[self.playTurn].JailedRound = 0
                         self.players[self.playTurn].inJail = False
                 elif self.players[self.playTurn].isBroke:
@@ -135,6 +136,7 @@ class Game:
                     curLand = self.map.getLand(player.locatedLand)
                     print('Player {} is at {}'.format(player.name, curLand.name))
                     self.landOperation(curLand, player)
+                  input('Please Enter to end this round')
                 print('\n'*3)
                 self.playTurn = (self.playTurn + 1)% self.numPlayer
                 self.updateRemainPlayer()
