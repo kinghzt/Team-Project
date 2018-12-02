@@ -1,276 +1,226 @@
-import PIL
 import random
-
-player_list = []
-# The map can be represented by a simple list of Land, because you only allow players to go forward in a single track
-board = []
-#initial game status
-game_running = True
-
+JAIL_INDEX = 14
+CHANCE_EARN_200 = 0
+CHANCE_EARN_100 = 1
+CHANCE_PAY_200 = 2
+CHANCE_PAY_100 = 3
+CHANCE_GO_TO_JAIL = 4
+MAX_CONSTRUCT_LEVEL = 3
 class Player:
     def __init__(self,name):
         self.name = name
         self.money = 10000
-        self.dice_value = 0
         self.locatedLand = 0
         self.inJail = False
-        self.ownedLands = []
-        self.enterYes = 'no'
-
-    def move(self):
-        if self.inJail == True:
-            count = 0
-            print("You are still in Jail. You have to get a dice value of 6 to get you out of Jail")
-            
-            self.dice_value=random.randint(1,7)
-            if self.dice_value == 6 or count == 3:
-                  print("Ok. You are free now")
-                  
-                  self.dice_value=random.randint(1,7)
-                  temp =self.locatedLand.location+ self.dice_value
-                  if temp >= 28:
-                      temp -= 28
-                  self.locatedLand=board[temp]
-            else:
-                count = count + 1
-                print('You cannot get out of Jail now')
+        self.JailedRound = 0
+        self.isBroke = False
+    def payMoney(self, amount):
+        if amount > self.money:
+            self.isBroke = True
+            print('Player {} is broke!'.format(self.name))
+            return False
         else:
-
-            self.dice_value=random.randint(1,7)          
-            temp =self.locatedLand.location+ self.dice_value
-            if temp >= 28:
-                temp -= 28
-            self.locatedLand=board[temp]
-
-    def buyaLand(self): 
-        if  self.enterYes== 'yes' and self.locatedLand.owner != self.name:
-            self.locatedLand.owner = self.name
-            self.locatedLand.wasBought = True
-            self.ownedLands.append(self.locatedLand)
-            self.money -= self.locatedLand.price
-            print(self.name + 'bought' + self.locatedLand.name + '!')
+            self.money -= amount
             return True
-        else:
-            None
-    
-    def construction(self):
-        if  self.enterYes== 'yes' and self.locatedLand.owner != self.name:
-            self.locatedLand.constructionLevel+= 1
-            self.money -= self.locatedLand.constructionCost
-            print(self.name + 'built a hotel on' + self.locatedLand.name)
-            return True
-        else:
-            None
-    
-    def event(self, player_list): 
-        Land == self.locatedLand
-        
-        if Land.name == 'CHANCE':
-            print("Welcome come to the Chance room! Let's see if you a lucky dog or not")
+    def earnMoney(self, amount):
+        self.money += amount
 
-            chance_incident = ['+$200', '+$100', '-$100','-$200','Jail','equal_to_1000']
-            get_chance = random.choice(chance_incident)
-
-            if get_chance == '+$200':
-                self.money = self.money + 200
-                print('Player' + self.name + 'just Won $200 from Chance room!')
-            elif get_chance == '+$100':
-                self.money = self.money + 100
-                print('Player' + self.name + 'just Won $100 from Chance room!')
-            elif get_chance == '-$100':
-                self.money = self.money - 100
-                print('Player' + self.name + 'just lost $100 from Chance room!')
-            elif get_chance == '-$200':
-                self.money = self.money - 200
-                print('Player' + self.name + 'just lost $200 from Chance room!')
-            elif get_chance == 'Jail':
-                self.locatedLand = 14
-                self.inJail = True
-                print('Player' + self.name + 'is sent to Jail because of bad luck')
-            elif get_chance == 'equal_to_1000':
-                self.money = 1000
-                print('Player' + self.name + 'total amount of money became $1000')
-            
-        if Land.name == 'Jail':
-            print("You are under arrested! You have stay here in the next three turns unless you can get a dice value of 6")
-            self.inJail = True
-            
-            pass
-
-        else:
-            if Land.wasBought == False:     
-                print(self.name +'threw a' + '%d'% self.dice_value + 'on the dice!')
-                print(self.name +'is in' + Land.name + '!')
-                print('Buying price is %d' % Land.price)
-                enterYes=input("Whether to buy?(yes/no): ")
-                while enterYes != 'yes' and enterYes != 'no':
-                    enterYes = input("You must enter yes or no. Please Enter Your Choice: ")
-                    return self.buyaland()
-            elif Land.owner == self.name:
-                print(self.name + 'threw a' + '%d'% self.dice_value + 'on the dice,')
-                print(self.name + 'comes to his land:'+ Land.name +'!')
-                if Land.constructionLevel <2:
-                    print('You can built a hotel on your land!')
-                    print('Construction fee is %d'% Land.constructionCost)
-                    enterYes=input("Whether to build?(yes/no): ")
-                    while enterYes != 'yes' and enterYes != 'no':
-                        enterYes = input("You must enter yes or no. Please Enter Your Choice: ")
-                    return self.construction()
-                else:
-                    print('You have reached its maximum level.')
-            else:
-                for player in player_list:
-                    if Land.owner == player.name and player.name != self.name:
-                        print(self.name + 'threw a' + '%d'% self.dice_value + 'on the dice!')
-                        print(self.name+ 'comes to'+ player.name+ 'land.')
-                        print('You are being charged!')
-                        print('Passing fee is %d' % (0.4 * Land.price * (2* Land.constructionLevel +1)))
-                        self.money -= 0.4 * Land.price * (2* Land.constructionLevel +1)
-                        player.money += 0.4 * Land.price * (2* Land.constructionLevel +1)
-                    else:
-
-                        None
-    def broke(self):
-        if self.money < 0:
-            print('You are broke. Game ends')
-            player_list.remove(self.name)
-            for land in self.ownedLands:
-                land.owner = 'no'
-                land.wasBought = False
-                land.constructionLevel = 0
-        else:
-            None
 class Land:
-    def __init__(self, name, price, location, constructionCost):
+    def __init__(self, name, price, constructionCost):
         self.name = name
-        self.price = price
-        self.constructionCost = constructionCost
-        self.wasBought = False  
+        self.basicPrice = price
+        self.basicConstructionCost = constructionCost 
         self.constructionLevel = 0
-        self.location = location
-        self.owner = 'no'                                                                                                                                                                                                            
-            
-def init_game():
-    # print out welcome messages, rules, and initialize map
-    #Create the Land object and add them to map
-    print("*"*50)
-    print("*" * 50)
-    print(" " * 10 + "Game of Monopoly! Enjoy your time!" + " "*10)
-    print("*" * 50)
-    print("*" * 50)
+        self.owner = None
+    def queryConstructCost(self):
+        #You should define your construction fee rule here
+        return self.basicConstructionCost * (self.constructionLevel + 1)
+    def construct(self, player):
+        print('Build house at {}'.format(self.name))
+        self.owner = player
+        player.payMoney(self.queryConstructCost())
+        self.constructionLevel += 1
+    def upgrade(self):
+        print('Upgrade house at {} from {} to {}'.format(self.name,self.constructionLevel,self.constructionLevel+1))
+        self.owner.payMoney(self.queryConstructCost())
+        self.constructionLevel += 1
+    def queryLevel(self):
+        return self.constructionLevel
+    def queryRoadToll(self):
+        #You should define your road toll rule here
+        return self.basicPrice*self.constructionLevel
 
-    setup_players()
-    #Create Lands Object
-    start = Land('Go',-200,0,0)
-    land1 = Land('LIBYA', 50,1,10)
-    land2 = Land('SUDAN',60,2,12)
-    land3 = Land('MOROCCO',70,3,14)
-    land4 = Land('TURKEY',100,4,20)
-    land5 = Land('GREECE',110,5,22)
-    land6 = Land('BULGARIA',120,6,24)
-    land7 = Land('CHANCE',0,7,0)
-    land8 = Land('POLAND',160,8,32)
-    land9 = Land('RUSSIA',170,9,34)
-    land10 = Land('UKRAINE',180,10,36)
-    land11 = Land('LITHUANIA',200,11,40)
-    land12 = Land('LATVIA',210,12,42)
-    land13 = Land('ESTONIA',220,13,44)
-    land14 = Land('JAIL',0,14,0)
-    land15 = Land('NORWAY',220,15,44)
-    land16 = Land('SWEDEN',230,16,46)
-    land17 = Land('FINLAND',240,17,48)
-    land18 = Land('GERMANY',280,18,56)
-    land19 = Land('FRANCE',290,19,58)
-    land20 = Land('UNITED KINDOM',300,20,60)
-    land21 = Land('CHANCE',0,21,0)
-    land22 = Land('CANDA',300,22,60)
-    land23 = Land('MEXICO',310,23,62)
-    land24 = Land('USA',320,24,64)
-    land25 = Land('CHINA ',330,25,66)
-    land26 = Land('DUBAI ',360,26,72)
-    land27 = Land('HAWAII',400,27,80)
-    board=[start, land1, land2, land3, land4, land5, land6, land7, land8, land9, land10, land11, land12, land13, land14, land15, land16, land17, land18, land19, land20, land21, land22, land23, land24, land25, land26, land27]
-    
-    from PIL import Image
-    im = Image.open('Monopoly.jpeg')
-    im.show()
+class Map:
+    def __init__(self):
+        self.board = [
+                Land('Go',0,0),
+                Land('LIBYA', 50,10),
+                Land('SUDAN',60,12),
+                Land('MOROCCO',70,14),
+                Land('TURKEY',100,20),
+                Land('GREECE',110,22),
+                Land('BULGARIA',120,24),
+                Land('CHANCE',0,0),
+                Land('POLAND',160,32),
+                Land('RUSSIA',170,34),
+                Land('UKRAINE',180,36),
+                Land('LITHUANIA',200,40),
+                Land('LATVIA',210,42),
+                Land('ESTONIA',220,44),
+                Land('JAIL',0,0),
+                Land('NORWAY',220,44),
+                Land('SWEDEN',230,46),
+                Land('FINLAND',240,48),
+                Land('GERMANY',280,56),
+                Land('FRANCE',290,58),
+                Land('UNITED KINDOM',300,60),
+                Land('CHANCE',0,0),
+                Land('CANDA',300,60),
+                Land('MEXICO',310,62),
+                Land('USA',320,64),
+                Land('CHINA ',330,66),
+                Land('DUBAI ',360,72),
+                Land('HAWAII',400,80)]
+    def getLength(self):
+        return len(self.board)
+    def getLand(self, index):
+        return self.board[index]
+class Game:
+    def __init__(self):
+        self.map = Map()
+        self.players = []
+        self.playTurn = 0
+        self.remainPlayer = -1
+        self.numPlayer = -1
+    def initialGame(self):
+        print("*"*50)
+        print("*" * 50)
+        print(" " * 10 + "Game of Monopoly! Enjoy your time!" + " "*10)
+        print("*" * 50)
+        print("*" * 50)
+        number_of_players = int(input("Please enter the number of players(2-4): "))
+        while number_of_players <2 or number_of_players >4:
+            number_of_players = int(input("Sorry, the current version cannot support this mode. \n Please enter the  correct number of payers(2-4): "))
+        self.numPlayer = number_of_players
+        self.remainPlayer = number_of_players
+        for i in range(0,number_of_players):
+            player_name = input("Enter the Player name:")
+            while player_name =='':
+                player_name = input("You must have a valid name to start. Please Enter the Player name: ")
+            self.players.append(Player(player_name))
 
-    pass
-
-
-def setup_players():
-    # prompt users to enter names, and then construct the player list
-    # player_list.append[...]
-
-    player_list = []
-    number_of_players = int(input("Please enter the number of payers(2-4): "))
-    while number_of_players <2 or number_of_players >4:
-        number_of_players = int(input("Sorry, the current version cannot support this mode. \n Please enter the  correct number of payers(2-4): "))
-    for i in range(0,number_of_players):
-        player_name = input("Enter the Player name:")
-        while player_name =='':
-            player_name = input("You must have a valid name to start. Please Enter the Player name: ")
-        player_list.append(Player(player_name))
-    
-    return player_list
-    pass
-
-
-def run_game():
-    # e.g.:
-    # while (some conditions that you determine to end a round):
-    #   play_round()
-
-        
-        
-    pass
-
-
-def play_round():
-    # Each player tosses the dice and make the move
-    # Make sure to update the Player object
-    pass
-
-
-def check_winner():
-    # Check whether there is a winner of the game
-    player_left = 0
-    winner = 0
-    for player in player_list:
-        if not player.broke():
-            player_left += 1
- 
-        if player_left == 1:
-            winner = self.name
-            return True
-    return False
-
-
-def end_game():
-    # winner won the game, print out winning status and other messages
-    print("*" * 100)
-    print("*" * 100)
-    print('■                                ■                                ■       ■          ■■                           ■')
-    print('  ■                            ■  ■                             ■         ■          ■    ■                       ■')
-    print('   ■                         ■      ■                         ■           ■          ■       ■                    ■')
-    print('     ■                     ■          ■                     ■             ■          ■          ■                 ■')
-    print('       ■                 ■              ■                 ■               ■          ■             ■              ■')
-    print('         ■             ■                  ■             ■                 ■          ■                ■           ■')
-    print('           ■         ■                      ■         ■                   ■          ■                   ■        ■')
-    print('             ■     ■                          ■     ■                     ■          ■                      ■     ■')
-    print('               ■ ■                              ■ ■                       ■          ■                         ■  ■')
-    print('                ■                                ■                        ■          ■                           ■■')
-    print("*" * 100)
-    print("*" * 100)
-    
-
-    print(winner,"is the wineer!")
-  
-
-
+    def start(self):
+        while(True):
+            if self.remainPlayer == 1:
+                self.endGame()
+                break
+            else:
+                print('It is {}\'s turn to go'.format(self.players[self.playTurn].name))
+                if self.players[self.playTurn].inJail:
+                    print('Player {} is in Jail'.format(self.players[self.playTurn].name))
+                    self.players[self.playTurn].JailedRound += 1
+                    if  self.players[self.playTurn].JailedRound == 3:
+                        self.players[self.playTurn].JailedRound = 0
+                        self.players[self.playTurn].inJail = False
+                elif self.players[self.playTurn].isBroke:
+                    pass
+                else:
+                    step = self.rollDice()
+                    print('You can go {} steps forward'.format(step))
+                    player = self.players[self.playTurn]
+                    if player.locatedLand+step>=self.map.getLength():
+                        player.earnMoney(200)
+                        print('Passing the start point. You earn 200')
+                    player.locatedLand = (step + player.locatedLand)%self.map.getLength()
+                    curLand = self.map.getLand(player.locatedLand)
+                    print('Player {} is at {}'.format(player.name, curLand.name))
+                    self.landOperation(curLand, player)
+                print('\n'*3)
+                self.playTurn = (self.playTurn + 1)% self.numPlayer
+                self.updateRemainPlayer()
+    def landOperation(self, curLand, player):
+        if curLand.name == 'CHANCE':
+            self.doChance(player)
+        elif curLand.name == 'JAIL':
+                player.inJail = True
+        elif curLand.name == 'Go':
+            pass
+        elif curLand.owner == None:
+            if player.money >= curLand.queryConstructCost():
+                while True:
+                    choice  = str(input('Are you willing to buy this land(Y/N)？ cost ${}'.format(curLand.queryConstructCost())))
+                    if choice == 'Y' or choice == 'y':
+                        curLand.construct(player)
+                        break
+                    elif choice == 'N' or choice == 'n':
+                        break
+                    else:
+                        print('Please input valid choice')
+        elif curLand.owner == player:
+            if curLand.constructionLevel!=MAX_CONSTRUCT_LEVEL and player.money >= curLand.queryConstructCost():
+                while True:
+                    choice  = str(input('Are you willing to upgrade this house(Y/N)？ cost ${}'.format(curLand.queryConstructCost())))
+                    if choice == 'Y' or choice == 'y':
+                        curLand.upgrade()
+                        break
+                    elif choice == 'N' or choice == 'n':
+                        break
+                    else:
+                        print('Please input valid choice')
+        else:
+            paid_amount = min(curLand.queryRoadToll(), player.money)
+            curLand.owner.earnMoney(paid_amount)
+            player.payMoney(curLand.queryRoadToll()) 
+            print('{} paid {} to {}'.format(player.name, paid_amount, curLand.owner.name))
+    def rollDice(self):
+        return random.randint(1, 6)
+    def doChance(self, player):
+        chance_code = random.randint(0,4)
+        if chance_code == CHANCE_EARN_100:
+            player.earnMoney(100)
+        elif chance_code == CHANCE_EARN_200:
+            player.earnMoney(200)
+        elif chance_code == CHANCE_PAY_100:
+            player.payMoney(100)
+        elif chance_code == CHANCE_PAY_200:
+            player.payMoney(200)
+        elif chance_code == CHANCE_GO_TO_JAIL:
+            player.inJail = True
+            player.locatedLand = JAIL_INDEX
+        else:
+            pass
+    def getSurvivior(self):
+        ret = []
+        for player in self.players:
+            if not player.isBroke:
+                ret.append(player)
+        return ret 
+    def updateRemainPlayer(self):
+        ret = 0
+        for player in self.players:
+            if not player.isBroke:
+                ret+=1
+        self.remainPlayer = ret
+    def endGame(self, player):
+        print("*" * 100)
+        print("*" * 100)
+        print('■                                ■                                ■       ■          ■■                           ■')
+        print('  ■                            ■  ■                             ■         ■          ■    ■                       ■')
+        print('   ■                         ■      ■                         ■           ■          ■       ■                    ■')
+        print('     ■                     ■          ■                     ■             ■          ■          ■                 ■')
+        print('       ■                 ■              ■                 ■               ■          ■             ■              ■')
+        print('         ■             ■                  ■             ■                 ■          ■                ■           ■')
+        print('           ■         ■                      ■         ■                   ■          ■                   ■        ■')
+        print('             ■     ■                          ■     ■                     ■          ■                      ■     ■')
+        print('               ■ ■                              ■ ■                       ■          ■                         ■  ■')
+        print('                ■                                ■                        ■          ■                           ■■')
+        print("*" * 100)
+        print("*" * 100)
+        print('Player {} is the winner'.format(self.getSurvivior[0].name))
 if __name__ == "__main__":
-    init_game()
-    while check_winner():
-        run_game()
-    end_game()
-
+    game = Game()
+    game.initialGame()
+    from PIL import Image
+    im = Image.open('Monopoly.jpg')
+    im.show()
+    game.start()
